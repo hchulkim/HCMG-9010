@@ -1,0 +1,70 @@
+---
+title: Questions on design-based and model-based approach
+format: 
+  clean-revealjs:
+    self-contained: true
+    scrollable: true
+html-math-method:
+  method: mathjax
+  url: "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+author:
+  - name: Hyoungchul Kim
+date: last-modified
+bibliography: refs.bib
+---
+
+## Motivation
+
+- Credible revolution seems to have solidified the role of concrete research design in the field of empirical economics.
+
+- Also, this revolution seems to have emphasized the concept of "design-based inference"
+
+- But there seems to be also "model-based" research design.
+
+- **I wanted to ask about their definitions and also ask how they are different.**
+
+- FYI, most of my understanding comes from lecture notes by Paul Goldsmith-Pinkham (Yale SOM) that I studied during winter.
+
+## What is design-based and model-based inference?
+
+According to the notes by Paul...
+
+::: {.callout-note appearance="default"}
+
+## Design-based approach
+
+This approach will involve assumptions about the treatment assignment mechanism, without making formal assumptions about the model of the potential outcomes.
+
+:::
+
+::: {.callout-note appearance="default"}
+
+## Model-based approach
+
+This approach will involve assumptions about modelling the expectation (or other functional) of the counterfactual, specifically dealing with any possible confounding variables. 
+
+:::
+
+### Comment
+
+- **Design-based**: the estimand is identified using assumptions on the treatment variable, conditional on the potential outcomes and additional variables. Examples include randomized control trials, DiD with random staggered timing, and PSM.
+
+- **Model-based**: the estimand is identified using assumptions on the modeling of the potential outcomes conditional on treatment and additional variables (e.g. parallel trends). Examples include DiD (including non-random staggered), regression discontinuity, synthetic control, etc.
+
+## More examples
+
+Consider the question of how smoking affects ppl's ability to breath. Let's say we want to know what the effect of a person being a smoker (D) is on the individuals ability to breath.
+
+- Design-based: Think hard about ways that shift around an individual's propensity to be a smoker in as-if random ways. (focusing on the treatment assignment mechanism)
+
+- Model-based: Compare individuals over time in places where cigarette smoking was legal earlier vs. later (focused on the modeling of the potential outcomes by using the individuals in the state with later smoking as a control for the earlier group).
+
+## How is this different?
+
+- I am not 100% sure about the definition of two terms and how they are different.
+
+- What does it mean to "model the potential outcomes" in model-based inference? Does that mean, potential outcomes is not *modeled* in design-based?
+
+- There are methods that can be both model-based and design-based then? e.g. DiD?
+
+- In case of the TWFE and DiD, how are they related (connected)?
