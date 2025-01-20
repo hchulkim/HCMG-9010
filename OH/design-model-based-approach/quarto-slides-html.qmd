@@ -23,7 +23,7 @@ bibliography: refs.bib
 
 - **I wanted to ask about their definitions and also ask how they are different.**
 
-- FYI, most of my understanding comes from lecture notes by Paul Goldsmith-Pinkham (Yale SOM) that I studied during winter.
+- FYI, most of my understanding comes from lecture notes by Paul Goldsmith-Pinkham (Yale SOM) that I studied alone during winter.
 
 ## What is design-based and model-based inference?
 
