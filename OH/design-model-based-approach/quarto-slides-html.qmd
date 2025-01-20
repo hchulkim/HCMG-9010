@@ -68,3 +68,7 @@ Consider the question of how smoking affects ppl's ability to breath. Let's say 
 - There are methods that can be both model-based and design-based then? e.g. DiD?
 
 - In case of the TWFE and DiD, how are they related (connected)?
+
+## Side question: Data generating process (DGP)
+
+- Is ATE, ATT concept equivalent or related to DGP?
