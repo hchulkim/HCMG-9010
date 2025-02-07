@@ -1,6 +1,6 @@
 ---
-title: "A Quarto Page Layout Example"
-subtitle: "Inspired by Tufte Handout, Using Quarto"
+title: "Problem set 1"
+subtitle: "Hyoungchul Kim"
 date: "`r Sys.Date()`"
 format:
     pdf: default
@@ -12,7 +12,6 @@ execute:
   echo: fenced
 reference-location: margin
 citation-location: margin
-bibliography: skeleton.bib
 ---
 
 # Introduction
