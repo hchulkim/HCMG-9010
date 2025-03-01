@@ -1,0 +1,239 @@
+\documentclass[notes,11pt, aspectratio=169]{beamer}
+\usetheme{default}
+\usepackage{helvet}
+\usepackage[default]{lato}
+\usepackage{amsmath}
+\usepackage{mathpazo}
+\usepackage{hyperref}
+\usepackage{lipsum}
+\usepackage{multimedia}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{changepage}
+\usepackage{booktabs}
+\usepackage{appendixnumberbeamer}
+\newcommand{\beginbackup}{
+   \newcounter{framenumbervorappendix}
+   \setcounter{framenumbervorappendix}{\value{framenumber}}
+   \setbeamertemplate{footline}
+   {
+     \leavevmode%
+     \hline
+     box{%
+       \begin{beamercolorbox}[wd=\paperwidth,ht=2.25ex,dp=1ex,right]{footlinecolor}%
+%         \insertframenumber  \hspace*{2ex}
+       \end{beamercolorbox}}%
+     \vskip0pt%
+   }
+ }
+\newcommand{\backupend}{
+   \addtocounter{framenumbervorappendix}{-\value{framenumber}}
+   \addtocounter{framenumber}{\value{framenumbervorappendix}}
+}
+% These are my colors -- there are many like them, but these ones are mine.
+\definecolor{blue}{RGB}{0,114,178}
+\definecolor{red}{RGB}{213,94,0}
+\definecolor{yellow}{RGB}{240,228,66}
+\definecolor{green}{RGB}{0,158,115}
+
+\hypersetup{
+  colorlinks=false,
+  linkbordercolor = {white},
+  linkcolor = {blue}
+}
+
+
+%% I use a beige off white for my background
+\definecolor{MyBackground}{RGB}{255,253,218}
+\setbeamercolor{frametitle}{fg=blue}
+\setbeamercolor{title}{fg=black}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize items}{-}
+\setbeamercolor{itemize item}{fg=blue}
+\setbeamercolor{itemize subitem}{fg=blue}
+\setbeamercolor{enumerate item}{fg=blue}
+\setbeamercolor{enumerate subitem}{fg=blue}
+\setbeamercolor{button}{bg=MyBackground,fg=blue,}
+\setbeamercolor{section in toc}{fg=blue}
+\setbeamercolor{subsection in toc}{fg=red}
+\setbeamersize{text margin left=1em,text margin right=1em}
+
+\newenvironment{wideitemize}{\itemize\addtolength{\itemsep}{10pt}}{\enditemize}
+
+% Customizing footer to display only the current page number
+% Customizing footer: Right-aligned but with some padding from the edge
+\setbeamertemplate{footline}{%
+  \hfill
+  \begin{beamercolorbox}[wd=\paperwidth,ht=0.4cm,dp=0.3cm,right]{footline}%
+    \hspace{-1cm} \insertframenumber\hspace{0.2cm} % Adjust the spacing here
+  \end{beamercolorbox}%
+}
+
+\title{\textcolor{blue}{Immigration and armed conflicts: Era of globalization}}
+
+\author{Hyoungchul Kim}
+
+\institute{Wharton UPenn}
+
+\date{\today}
+
+\begin{document}
+
+\begin{frame}[plain]
+	\titlepage
+\end{frame}
+
+\setcounter{framenumber}{0}
+
+\begin{frame}{Motivation}
+	\textbf{Cultural \& economic integration led to surge of immigration worldwide:}
+	\begin{itemize}
+		\item Emergence of globalization.
+		\item Post-cold war (1991 - ). 
+		\item Schengen Agreement (1985 - ).
+		\item US immigration Act 1990 (Annual cap: 500,000 to 700,000).
+		\item[$\Rightarrow$] \textcolor{red}{Important to understand its impact on the society.}
+	\end{itemize}\vspace{1em}
+
+	\textbf{Understanding the impact of immigration is also important in economic perspective}
+	\begin{itemize}
+		\item Local labor market effect; Local amenities; etc.
+		\item [$\Rightarrow$] \textcolor{red}{What about War?}
+	\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Food for thought}
+	\textbf{Will immigration increase/decrease conflicts?} \textcolor{red}{Not easy to answer.}	
+	\begin{itemize}
+		\item \textbf{Increase}: (1) Conflicts between natives (2) Bring immigrants' conflicts into the country.  
+		\item \textbf{Decrease}: Higher proportion of immigration may increase the opportunity cost for one group to disturb the peace.
+	\end{itemize}\vspace{1em}
+
+	\textbf{Indirect effect could also matter!}
+	\begin{itemize}
+		\item The opportunity cost of starting a war could increase if the opponent has large portion of immigration from other countries.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Prior literature}
+	\textbf{Economic activity and armed conflicts}
+\begin{itemize}
+	\item Armed conflicts can be enormously disruptive of economic activity and hamper long-term performance.
+	\item Glick and Taylor (2010).
+\end{itemize}\vspace{1em}
+
+\textbf{Trade and war}
+\begin{itemize}
+	\item Regarding the determinants of war, large literature focused on the impact of trade on war (the results are mixed).
+	\item Barbieri (1996, 2002); Gartzke and Li (2003); martin et al. (2008).
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Research question}
+	\textbf{Does immigration increase or decrease war/armed conflicts?}	
+	\begin{itemize}
+		\item Heterogeneous effects depending on the types of conflict.
+		\item Direct and indirect effect of immigration.
+	\end{itemize}\vspace{1em}
+
+	\textbf{Research design}
+	\begin{itemize}
+		\item Use worldwide immigration patterns from 1990-2015.
+		\item Identification strategy: Shift-share IV to causally estimate the impact of immigration.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Preview of results}
+	\textbf{Some trial and error}
+	\begin{itemize}
+		\item Applied shift-share IV regression to estimate impact of immigration on intrastate conflict.
+		\item IV first stage not that great.
+		\item Regression specification not robust to the change in specification.
+		\item :(
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Data}
+	\textbf{Immigration}
+	\begin{itemize}
+		\item UN Global migration database (1990-2024, 5 years): Destination-origin pair of immigration stock, at least 190 countries every year. 
+		\item World Bank migration data (1960-2000, decennial): Use it for exogenous IV share.
+	\end{itemize}\vspace{1em}
+
+	\textbf{Armed conflicts}
+	\begin{itemize}
+		\item UCDP/PRIO Armed conflict dataset (1946-2022, annually): Incidence of conflicts (at least 25 battle death, interstate, intrastate) 
+	\end{itemize}\vspace{1em}
+
+	\textbf{Other data for controls}
+	\begin{itemize}
+		\item CEPII: Trade volume, GDP, WTO, GATT, etc.
+	\end{itemize}\vspace{1em}
+	\begin{center}
+	\textbf{Final sample: 1990-2022, destination-origin pair of countries}.
+	\end{center}
+\end{frame}
+
+\begin{frame}{Baseline regression}
+	We aggregate the destination-origin pair to destination for now.
+\begin{align*}
+	y_{it} = \alpha + \beta D_{it} + \Gamma' X_{it} + \varepsilon_{it}. 
+\end{align*}	
+
+\begin{itemize}
+	\item Note that the years are aggregated to every 5 years.
+	\item $y_{it}$ is the cumulative sum of conflicts that country $i$ was involved in during 5 years after year $t$.
+	\item $D_{it}$ is share of share of total immigration stock (w.r.t. total population) in start of the year $T$. 
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Identification strategy: Shift-share IV}
+	We construct shift-share IV as follows:
+	\begin{align*}
+		D_{it} &= \text{IMM}_{it} / \text{POP}_{it} \quad \text{where}\\ \nonumber  
+		\text{IMM}_{it}  &= \sum_j \overbrace{\text{WORLD}_{j,t-1}}^{\textcolor{red}{\text{Shift}}} \times \underbrace{\frac{\text{CNTRY}_{ij, 1960}}{\text{CNTRY}_{i,1960}}}_{\textcolor{red}{\text{Share}}}	
+	\end{align*}
+
+	\begin{itemize}
+		\item $\text{IMM}_{it}$ is number of immigration stock in country $i$ in year $t$.
+		\item $\text{WORLD}_{j,t-1}$ is the number of total immigration flow  coming out from country $j$ between year $t$ and $t-1$.
+		\item $\text{CNTRY}$ just implies the share of immigration stock in country $i$ that came from country $j$ in year 1960.
+		\item Identification assumption: (1) Some exogenous portion of immigration shift starting from 1990s, (2) Some exogenous portion of immigration share by fixing it to 1960.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{First-stage result}
+	\begin{figure}
+		\resizebox{\textwidth}{!}{
+		\includegraphics{first.png}}
+	\end{figure}	
+	IV does not look that great\ldots
+\end{frame}
+
+\begin{frame}{2SLS results}
+\begin{table}
+	\resizebox{0.8\textwidth}{!}{
+	\input{reg.tex}}
+\end{table}	
+\begin{footnotesize}
+	\textbf{Notes.} ***: 0.01, **: 0.05, *: 0.01
+\end{footnotesize}
+\end{frame}
+
+\begin{frame}{Concerns and thoughts}
+\begin{itemize}
+	\item Is it an interesting question?
+	\item Cross country analysis?
+	\item IV assumptions? Using different data for share?
+	\item Not great IV. Alternative?
+	\item Clustering significantly affects the significance.
+	\item Better data on immigration?
+\end{itemize}	
+\end{frame}
+
+
+\end{document}

@@ -1,0 +1,515 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod]{scrartcl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{241,243,245}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.40,0.45,0.13}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\ExtensionTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.07,0.07,0.07}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+\usepackage{float}
+\usepackage{tabularray}
+\usepackage[normalem]{ulem}
+\usepackage{graphicx}
+\UseTblrLibrary{booktabs}
+\UseTblrLibrary{rotating}
+\UseTblrLibrary{siunitx}
+\NewTableCommand{\tinytableDefineColor}[3]{\definecolor{#1}{#2}{#3}}
+\newcommand{\tinytableTabularrayUnderline}[1]{\underline{#1}}
+\newcommand{\tinytableTabularrayStrikeout}[1]{\sout{#1}}
+\usepackage{fvextra}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+\DefineVerbatimEnvironment{OutputCode}{Verbatim}{breaklines,commandchars=\\\{\}}
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+
+\usepackage{bookmark}
+
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Problem Set 2},
+  pdfauthor={Hyoungchul Kim},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{Problem Set 2}
+\author{Hyoungchul Kim}
+\date{2025-02-26}
+
+\begin{document}
+\maketitle
+
+
+First read in some necessary programming packages for analysis:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load libraries}
+\ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\FunctionTok{require}\NormalTok{(pacman)) }\FunctionTok{install.packages}\NormalTok{(}\StringTok{"pacman"}\NormalTok{)}
+\FunctionTok{p\_load}\NormalTok{(tidyverse, data.table, fixest, modelsummary, texreg)}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Theory questions}\label{theory-questions}
+
+\subsection{a.}\label{a.}
+
+We learned in class that 2SLS coefficients in finite sample is biased.
+To be exact, Hahn and Hausman (\emph{Ecma}, 2002) showed that
+\(\mathbb{E}(b_{2SLS} - \beta) \approx \frac{\sigma_{\eta \xi}}{\sigma^2_\xi} \frac{1}{F+1}\)
+where \(F\) is the first stagef-statistics, a proxy for the predictive
+strength of the instrument effect. since \(F\) is in the denominator, we
+can see that higher predictive power will decrease the bias. On the
+other hand, the predictive strength of the instrument does not affect
+the consistency of the IV estimator. As long as we have the exclusion
+condition satisfied, the probability limit of the IV estimator converges
+to the estimand.
+
+\subsection{b.}\label{b.}
+
+Since LATE is still a type of IV, we need the exclusion and relativity
+condition to hold. That is, the IV should be correlated with the
+treatment varible of interest and should only affect the outcome through
+the treatment variable. (Note that SUTVA, random assignment is also
+necessary for the IV method to hold).
+
+One extra assumption we need is the \textbf{monotonicity condition}.
+This just means that there are no defier.
+
+Now let's prove the LATE theorem under these maintained assumptions:
+
+Using assumptions above, we can get:
+
+\begin{align}
+  \beta_{late} &= \frac{\mathbb{E}(Y_i \mid Z_i = 1) - \mathbb{E}(Y_i \mid Z_i = 0)}{\mathbb{E}(D_i \mid Z_i = 1) - \mathbb{E}(D_i \mid Z_i = 0)}\\
+   &= \frac{\mathbb{E}[Y_{1i} - Y_{0i} \mid \text{compliers}]P(\text{compliers})}{P(\text{compliers})}\\
+   &= \mathbb{E}[Y_{1i} - Y_{0i} \mid \text{compliers}]
+\end{align}
+
+So this shows that by using the assumption we can get the ATE for the
+compliers in our data.
+
+\subsection{c.}\label{c.}
+
+You can easily check from the question b that the monotonicity is
+crucial for retrieving LATE. The nominator in the question b is the
+reduced form estimate. Without monotonicity, we cannot have the reduced
+form estimate to equal the change in potential outcome effect for
+compliers. You can also see that the denominator implies the usefulness
+of monotonicity in first stage. If we assume there is defiers, the first
+stage estimate cannot be the probability of being the complier. Thus
+monotonicity is crucial to pin down the LATE estimate.
+
+\subsection{d.}\label{d.}
+
+If there is no always takers, this means all of our data will be made up
+of compliers (under the assumption of monotonicity). So this implies
+that \(\mathbb{E} [D_i \mid Z_i = 0] = 0\). Then using the fact that
+\(\mathbb{E}[Y_i \mid Z_i = 1] = \mathbb{E}[Y_{0i}]\) and
+\(\mathbb{E}[Y_i \mid Z_i = 1] = \mathbb{E}[Y_{0i} + (Y_{1i} - Y_{0i}) D_i \mid Z_i = 1]\)
+from the lecture, we get:
+
+\begin{align}
+ \beta_{late} &= \frac{\mathbb{E} [(Y_{1i}-Y_{0i}) D_i \mid Z_i = 1]}{P[D_i = 1 \mid Z_i =1]}\\
+  &= \frac{\mathbb{E}[(Y_{1i} - Y_{0i}) (1) \mid D_i =1, Z_i =1] P[D_i = 1 \mid Z_i = 1]+ 0}{P[D_i = 1 \mid Z_i = 1]}\\
+  &= \mathbb{E}[(Y_{1i} - Y_{0i} \mid D_i =1, Z_i = 1)]\\
+  &= \mathbb{E}[(Y_{1i} - Y_{0i}) \mid D_i = 1] = ATT
+\end{align}
+
+\subsection{e.}\label{e.}
+
+Unlike LATE, MTC allows sorting on unobserved treatment effects. For
+LATE, if there is unobserved soring, it might not recover the ATE for
+compliers. MTA in some way alleviates this issue by allowing treatment
+probability to be correlated with treatment effects. It is also helpful
+if you want to recover population treatment effect parameters like ATT
+and not jus the LATE. But we need to assume some functional form
+restrictions. For example, we assume treatment effect is additive and
+separable. Also, we assume outcome Y depends on X in a linear, additive
+form. Using these assumptions, we can write MTC as sum of observed and
+unobserved components:
+\(MTE(X=x, U_D = p) = x'(\beta_1 - \beta_0) + \mathbb{E}(u_{1i} - u_{0i} \mid p)\).
+Then we can express
+\(\mathbb{E}[Y_i \mid X = x, P = p] = x' \beta_0 + x' (\beta_1 - \beta_0)p + K(p)\),
+where laster term on RHS is a polynomial that approximates the
+unobserved portion of Y. Then we can estimate the MTE by taking the
+derivative with respect to p.
+
+\section{Numerical questions}\label{numerical-questions}
+
+\subsection{a.}\label{a.-1}
+
+First, we read in the data.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data }\OtherTok{\textless{}{-}}\NormalTok{ haven}\SpecialCharTok{::}\FunctionTok{read\_dta}\NormalTok{(}\StringTok{"../data/OHIE\_Public\_Use\_Files/OHIE\_Data/oregonhie\_descriptive\_vars.dta"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Now we get the balance table by treatment status. We do it for full
+sample:
+
+\subsubsection{Full sample}\label{full-sample}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Convert treatment to a factor and then assign new labels}
+\NormalTok{data }\OtherTok{\textless{}{-}} \FunctionTok{as.data.table}\NormalTok{(data)}
+\NormalTok{balance\_full }\OtherTok{\textless{}{-}}\NormalTok{ data[, .(person\_id, treatment, }\AttributeTok{birth\_year =}\NormalTok{ birthyear\_list, }\AttributeTok{female =}\NormalTok{ female\_list, }\AttributeTok{english =}\NormalTok{ english\_list, }\AttributeTok{msa =}\NormalTok{ zip\_msa\_list)]}
+\NormalTok{balance\_full[, age }\SpecialCharTok{:}\ErrorTok{=} \DecValTok{2009} \SpecialCharTok{{-}}\NormalTok{ birth\_year]}
+\NormalTok{balance\_full[, treatment }\SpecialCharTok{:}\ErrorTok{=} \FunctionTok{as\_factor}\NormalTok{(treatment)]}
+\NormalTok{balance\_full[, treatment }\SpecialCharTok{:}\ErrorTok{=} \FunctionTok{fcase}\NormalTok{(}
+\NormalTok{  treatment }\SpecialCharTok{==} \StringTok{"Selected"}\NormalTok{, }\StringTok{"treat"}\NormalTok{,}
+\NormalTok{  treatment }\SpecialCharTok{==} \StringTok{"Not selected"}\NormalTok{, }\StringTok{"control"}
+\NormalTok{)]}
+
+\NormalTok{mean\_na }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x) }\FunctionTok{mean}\NormalTok{(x, }\AttributeTok{na.rm=}\NormalTok{T)}
+
+\FunctionTok{datasummary}\NormalTok{(age }\SpecialCharTok{+}\NormalTok{ female }\SpecialCharTok{+}\NormalTok{ english }\SpecialCharTok{+}\NormalTok{ msa }\SpecialCharTok{\textasciitilde{}}\NormalTok{ treatment }\SpecialCharTok{*}\NormalTok{ mean\_na, }
+  \AttributeTok{data =}\NormalTok{ balance\_full,}
+  \AttributeTok{title =} \StringTok{"Balance table (full sample)"}\NormalTok{,}
+  \AttributeTok{fmt =} \DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}
+\centering
+\begin{talltblr}[         %% tabularray outer open
+caption={Balance table (full sample)},
+]                     %% tabularray outer close
+{                     %% tabularray inner open
+colspec={Q[]Q[]Q[]},
+column{1}={}{halign=l,},
+column{2,3}={}{halign=r,},
+}                     %% tabularray inner close
+\toprule
+& control & treat \\ \midrule %% TinyTableHeader
+age                                                                & \num{41.002} & \num{40.804} \\
+Female: lottery list data                                          & \num{0.557}  & \num{0.541}  \\
+Individual requested english-language materials: lottery list data & \num{0.922}  & \num{0.902}  \\
+Zip code from lottery list is a metropolitan statistical area      & \num{0.773}  & \num{0.764}  \\
+\bottomrule
+\end{talltblr}
+\end{table}
+
+Next we do it for people who responded to the survey:
+
+\subsubsection{Survery responder}\label{survery-responder}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data2 }\OtherTok{\textless{}{-}}\NormalTok{ haven}\SpecialCharTok{::}\FunctionTok{read\_dta}\NormalTok{(}\StringTok{"../data/OHIE\_Public\_Use\_Files/OHIE\_Data/oregonhie\_survey0m\_vars.dta"}\NormalTok{)}
+
+\NormalTok{data2 }\OtherTok{\textless{}{-}}\NormalTok{ data2 }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{select}\NormalTok{(person\_id, }\AttributeTok{employ =}\NormalTok{ employ\_hrs\_0m, }\AttributeTok{education =}\NormalTok{ edu\_0m, }\FunctionTok{starts\_with}\NormalTok{(}\StringTok{"race"}\NormalTok{), }\FunctionTok{starts\_with}\NormalTok{(}\StringTok{"ins"}\NormalTok{), }\AttributeTok{language =}\NormalTok{ surv\_lang\_0m, )}
+
+\NormalTok{data2 }\OtherTok{\textless{}{-}}\NormalTok{ data2 }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{left\_join}\NormalTok{(balance\_full, }\AttributeTok{by=}\StringTok{"person\_id"}\NormalTok{)}
+
+
+\FunctionTok{datasummary}\NormalTok{(age }\SpecialCharTok{+}\NormalTok{ female }\SpecialCharTok{+}\NormalTok{ english }\SpecialCharTok{+}\NormalTok{ msa }\SpecialCharTok{+}\NormalTok{ employ }\SpecialCharTok{+}\NormalTok{ education }\SpecialCharTok{\textasciitilde{}}\NormalTok{ treatment }\SpecialCharTok{*}\NormalTok{ mean\_na,}
+  \AttributeTok{data =}\NormalTok{ data2,}
+  \AttributeTok{title =} \StringTok{"Balance table (survey responders only)"}\NormalTok{,}
+  \AttributeTok{fmt =} \DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}
+\centering
+\begin{talltblr}[         %% tabularray outer open
+caption={Balance table (survey responders only)},
+]                     %% tabularray outer close
+{                     %% tabularray inner open
+colspec={Q[]Q[]Q[]},
+column{1}={}{halign=l,},
+column{2,3}={}{halign=r,},
+}                     %% tabularray inner close
+\toprule
+& control & treat \\ \midrule %% TinyTableHeader
+age                                                                & \num{41.002} & \num{40.804} \\
+Female: lottery list data                                          & \num{0.557}  & \num{0.541}  \\
+Individual requested english-language materials: lottery list data & \num{0.922}  & \num{0.902}  \\
+Zip code from lottery list is a metropolitan statistical area      & \num{0.773}  & \num{0.764}  \\
+Average hrs worked/week                                            & \num{2.117}  & \num{2.146}  \\
+Highest level of education completed                               & \num{2.231}  & \num{2.220}  \\
+\bottomrule
+\end{talltblr}
+\end{table}
+
+We can see that there is not much significant differences between
+control group and treatment group. This seems to imply that
+randomization is quite well done.
+
+Now let's check ITT:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data3 }\OtherTok{\textless{}{-}}\NormalTok{ haven}\SpecialCharTok{::}\FunctionTok{read\_dta}\NormalTok{(}\StringTok{"../data/OHIE\_Public\_Use\_Files/OHIE\_Data/oregonhie\_stateprograms\_vars.dta"}\NormalTok{)}
+
+\NormalTok{data3 }\OtherTok{\textless{}{-}}\NormalTok{ data3 }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{select}\NormalTok{(person\_id, }\AttributeTok{medicaid =}\NormalTok{ ohp\_all\_ever\_inperson, }\AttributeTok{ohp =}\NormalTok{ ohp\_std\_ever\_inperson)}
+\NormalTok{data3 }\OtherTok{\textless{}{-}}\NormalTok{ data3 }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{mutate}\NormalTok{(}\AttributeTok{health =} \FunctionTok{if\_else}\NormalTok{(medicaid }\SpecialCharTok{\textgreater{}} \DecValTok{0} \SpecialCharTok{|}\NormalTok{ ohp }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{))}
+\NormalTok{data2 }\OtherTok{\textless{}{-}}\NormalTok{ data2 }\SpecialCharTok{\%\textgreater{}\%} 
+\FunctionTok{left\_join}\NormalTok{(data3, }\AttributeTok{by=}\StringTok{"person\_id"}\NormalTok{)}
+
+\NormalTok{itt }\OtherTok{\textless{}{-}} \FunctionTok{feols}\NormalTok{(health }\SpecialCharTok{\textasciitilde{}}\NormalTok{ treatment, }\AttributeTok{data =}\NormalTok{ data2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+NOTE: 54,177 observations removed because of NA values (LHS: 54,177).
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{screenreg}\NormalTok{(itt, }\AttributeTok{digits=}\DecValTok{3}\NormalTok{, }\AttributeTok{custom.model.names =} \FunctionTok{c}\NormalTok{(}\StringTok{"Health Care"}\NormalTok{) , }\AttributeTok{custom.coef.map =} \FunctionTok{list}\NormalTok{(}\StringTok{"treatmenttreat"} \OtherTok{=} \StringTok{"Lottery"}\NormalTok{), }\AttributeTok{include.rsquared =} \ConstantTok{FALSE}\NormalTok{, }
+       \AttributeTok{include.adjrs =} \ConstantTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+========================
+           Health Care  
+------------------------
+Lottery        0.156 ***
+              (0.005)   
+------------------------
+Num. obs.  20745        
+========================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+\end{verbatim}
+
+You can see that the estimate is positive. This makes sense as winning
+the lottery makes you more likely to get a health care insurance. In a
+way, this could be understood as policy relevant as this shows you the
+compliance rate of people the government wants to treat. This estimate
+implies the magnitude of how likely people will respond to the treatment
+(lottery) policy.
+
+\subsection{b.}\label{b.-1}
+
+Using OLS is problematic as people receive medicaid and people who don't
+are different set of people. That is, the potential outcome (health)
+will be correlated with the treatment of having medicaid. Thus running
+OLS is give us a biased result.
+
+Let's look at a balance table between those who received medicaid and
+the remaining people.
+
+\clearpage
+
+\begin{table}
+\centering
+\begin{talltblr}[         %% tabularray outer open
+caption={Balance table (survey responders only)},
+]                     %% tabularray outer close
+{                     %% tabularray inner open
+colspec={Q[]Q[]Q[]},
+column{1}={}{halign=l,},
+column{2,3}={}{halign=r,},
+}                     %% tabularray inner close
+\toprule
+& No medicaid & Yes medicaid \\ \midrule %% TinyTableHeader
+age                                                                & \num{40.089} & \num{40.184} \\
+Female: lottery list data                                          & \num{0.522}  & \num{0.642}  \\
+Individual requested english-language materials: lottery list data & \num{0.903}  & \num{0.909}  \\
+Zip code from lottery list is a metropolitan statistical area      & \num{0.997}  & \num{0.997}  \\
+Average hrs worked/week                                            & \num{2.203}  & \num{1.722}  \\
+Highest level of education completed                               & \num{2.335}  & \num{2.227}  \\
+\bottomrule
+\end{talltblr}
+\end{table}
+
+While there is too big difference, you can see some characteristics
+differ between two groups than the previous randomization (gender ratio,
+average hours worked, etc).
+
+\subsection{c.}\label{c.-1}
+
+\subsection{d.}\label{d.-1}
+
+\subsection{e.}\label{e.-1}
+
+\subsection{f.}\label{f.}
+
+\subsection{g.}\label{g.}
+
+
+
+
+\end{document}
