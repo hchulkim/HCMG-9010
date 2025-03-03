@@ -207,7 +207,7 @@
 
 \title{Problem Set 2}
 \author{Hyoungchul Kim}
-\date{2025-02-26}
+\date{2025-03-02}
 
 \begin{document}
 \maketitle
@@ -316,7 +316,15 @@ First, we read in the data.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{data }\OtherTok{\textless{}{-}}\NormalTok{ haven}\SpecialCharTok{::}\FunctionTok{read\_dta}\NormalTok{(}\StringTok{"../data/OHIE\_Public\_Use\_Files/OHIE\_Data/oregonhie\_descriptive\_vars.dta"}\NormalTok{)}
+\NormalTok{data\_des }\OtherTok{\textless{}{-}}\NormalTok{ haven}\SpecialCharTok{::}\FunctionTok{read\_dta}\NormalTok{(}\StringTok{"../data/OHIE\_Public\_Use\_Files/OHIE\_Data/oregonhie\_descriptive\_vars.dta"}\NormalTok{)}
+\NormalTok{data\_state }\OtherTok{\textless{}{-}}\NormalTok{ haven}\SpecialCharTok{::}\FunctionTok{read\_dta}\NormalTok{(}\StringTok{"../data/OHIE\_Public\_Use\_Files/OHIE\_Data/oregonhie\_stateprograms\_vars.dta"}\NormalTok{)}
+\NormalTok{data\_0 }\OtherTok{\textless{}{-}}\NormalTok{ haven}\SpecialCharTok{::}\FunctionTok{read\_dta}\NormalTok{(}\StringTok{"../data/OHIE\_Public\_Use\_Files/OHIE\_Data/oregonhie\_survey0m\_vars.dta"}\NormalTok{)}
+\NormalTok{data\_12 }\OtherTok{\textless{}{-}}\NormalTok{ haven}\SpecialCharTok{::}\FunctionTok{read\_dta}\NormalTok{(}\StringTok{"../data/OHIE\_Public\_Use\_Files/OHIE\_Data/oregonhie\_survey12m\_vars.dta"}\NormalTok{)}
+
+\NormalTok{data }\OtherTok{\textless{}{-}}\NormalTok{ data\_des }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{left\_join}\NormalTok{(data\_state, }\AttributeTok{by=}\StringTok{"person\_id"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{left\_join}\NormalTok{(data\_0, }\AttributeTok{by =} \StringTok{"person\_id"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{left\_join}\NormalTok{(data\_12, }\AttributeTok{by =} \StringTok{"person\_id"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -329,18 +337,17 @@ sample:
 \begin{Highlighting}[]
 \CommentTok{\# Convert treatment to a factor and then assign new labels}
 \NormalTok{data }\OtherTok{\textless{}{-}} \FunctionTok{as.data.table}\NormalTok{(data)}
-\NormalTok{balance\_full }\OtherTok{\textless{}{-}}\NormalTok{ data[, .(person\_id, treatment, }\AttributeTok{birth\_year =}\NormalTok{ birthyear\_list, }\AttributeTok{female =}\NormalTok{ female\_list, }\AttributeTok{english =}\NormalTok{ english\_list, }\AttributeTok{msa =}\NormalTok{ zip\_msa\_list)]}
-\NormalTok{balance\_full[, age }\SpecialCharTok{:}\ErrorTok{=} \DecValTok{2009} \SpecialCharTok{{-}}\NormalTok{ birth\_year]}
-\NormalTok{balance\_full[, treatment }\SpecialCharTok{:}\ErrorTok{=} \FunctionTok{as\_factor}\NormalTok{(treatment)]}
-\NormalTok{balance\_full[, treatment }\SpecialCharTok{:}\ErrorTok{=} \FunctionTok{fcase}\NormalTok{(}
+\NormalTok{data[, age }\SpecialCharTok{:}\ErrorTok{=} \DecValTok{2009} \SpecialCharTok{{-}}\NormalTok{ birthyear\_list]}
+\NormalTok{data[, treatment }\SpecialCharTok{:}\ErrorTok{=} \FunctionTok{as\_factor}\NormalTok{(treatment)]}
+\NormalTok{data[, treatment }\SpecialCharTok{:}\ErrorTok{=} \FunctionTok{fcase}\NormalTok{(}
 \NormalTok{  treatment }\SpecialCharTok{==} \StringTok{"Selected"}\NormalTok{, }\StringTok{"treat"}\NormalTok{,}
 \NormalTok{  treatment }\SpecialCharTok{==} \StringTok{"Not selected"}\NormalTok{, }\StringTok{"control"}
 \NormalTok{)]}
 
 \NormalTok{mean\_na }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x) }\FunctionTok{mean}\NormalTok{(x, }\AttributeTok{na.rm=}\NormalTok{T)}
 
-\FunctionTok{datasummary}\NormalTok{(age }\SpecialCharTok{+}\NormalTok{ female }\SpecialCharTok{+}\NormalTok{ english }\SpecialCharTok{+}\NormalTok{ msa }\SpecialCharTok{\textasciitilde{}}\NormalTok{ treatment }\SpecialCharTok{*}\NormalTok{ mean\_na, }
-  \AttributeTok{data =}\NormalTok{ balance\_full,}
+\FunctionTok{datasummary}\NormalTok{(age }\SpecialCharTok{+}\NormalTok{ female\_list }\SpecialCharTok{+}\NormalTok{ english\_list }\SpecialCharTok{+}\NormalTok{ zip\_msa\_list }\SpecialCharTok{\textasciitilde{}}\NormalTok{ treatment }\SpecialCharTok{*}\NormalTok{ mean\_na, }
+  \AttributeTok{data =}\NormalTok{ data,}
   \AttributeTok{title =} \StringTok{"Balance table (full sample)"}\NormalTok{,}
   \AttributeTok{fmt =} \DecValTok{3}\NormalTok{)}
 \end{Highlighting}
@@ -372,17 +379,8 @@ Next we do it for people who responded to the survey:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{data2 }\OtherTok{\textless{}{-}}\NormalTok{ haven}\SpecialCharTok{::}\FunctionTok{read\_dta}\NormalTok{(}\StringTok{"../data/OHIE\_Public\_Use\_Files/OHIE\_Data/oregonhie\_survey0m\_vars.dta"}\NormalTok{)}
-
-\NormalTok{data2 }\OtherTok{\textless{}{-}}\NormalTok{ data2 }\SpecialCharTok{\%\textgreater{}\%} 
-  \FunctionTok{select}\NormalTok{(person\_id, }\AttributeTok{employ =}\NormalTok{ employ\_hrs\_0m, }\AttributeTok{education =}\NormalTok{ edu\_0m, }\FunctionTok{starts\_with}\NormalTok{(}\StringTok{"race"}\NormalTok{), }\FunctionTok{starts\_with}\NormalTok{(}\StringTok{"ins"}\NormalTok{), }\AttributeTok{language =}\NormalTok{ surv\_lang\_0m, )}
-
-\NormalTok{data2 }\OtherTok{\textless{}{-}}\NormalTok{ data2 }\SpecialCharTok{\%\textgreater{}\%} 
-  \FunctionTok{left\_join}\NormalTok{(balance\_full, }\AttributeTok{by=}\StringTok{"person\_id"}\NormalTok{)}
-
-
-\FunctionTok{datasummary}\NormalTok{(age }\SpecialCharTok{+}\NormalTok{ female }\SpecialCharTok{+}\NormalTok{ english }\SpecialCharTok{+}\NormalTok{ msa }\SpecialCharTok{+}\NormalTok{ employ }\SpecialCharTok{+}\NormalTok{ education }\SpecialCharTok{\textasciitilde{}}\NormalTok{ treatment }\SpecialCharTok{*}\NormalTok{ mean\_na,}
-  \AttributeTok{data =}\NormalTok{ data2,}
+\FunctionTok{datasummary}\NormalTok{(age }\SpecialCharTok{+}\NormalTok{ female\_list }\SpecialCharTok{+}\NormalTok{ english\_list }\SpecialCharTok{+}\NormalTok{ zip\_msa\_list }\SpecialCharTok{+}\NormalTok{ employ\_hrs\_12m }\SpecialCharTok{+}\NormalTok{ edu\_12m }\SpecialCharTok{\textasciitilde{}}\NormalTok{ treatment }\SpecialCharTok{*}\NormalTok{ mean\_na,}
+  \AttributeTok{data =}\NormalTok{ data,}
   \AttributeTok{title =} \StringTok{"Balance table (survey responders only)"}\NormalTok{,}
   \AttributeTok{fmt =} \DecValTok{3}\NormalTok{)}
 \end{Highlighting}
@@ -404,8 +402,8 @@ age                                                                & \num{41.002
 Female: lottery list data                                          & \num{0.557}  & \num{0.541}  \\
 Individual requested english-language materials: lottery list data & \num{0.922}  & \num{0.902}  \\
 Zip code from lottery list is a metropolitan statistical area      & \num{0.773}  & \num{0.764}  \\
-Average hrs worked/week                                            & \num{2.117}  & \num{2.146}  \\
-Highest level of education completed                               & \num{2.231}  & \num{2.220}  \\
+Average hrs worked/week                                            & \num{2.059}  & \num{2.106}  \\
+Highest level of education completed                               & \num{2.280}  & \num{2.274}  \\
 \bottomrule
 \end{talltblr}
 \end{table}
@@ -418,40 +416,31 @@ Now let's check ITT:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{data3 }\OtherTok{\textless{}{-}}\NormalTok{ haven}\SpecialCharTok{::}\FunctionTok{read\_dta}\NormalTok{(}\StringTok{"../data/OHIE\_Public\_Use\_Files/OHIE\_Data/oregonhie\_stateprograms\_vars.dta"}\NormalTok{)}
+\NormalTok{itt1 }\OtherTok{\textless{}{-}} \FunctionTok{feols}\NormalTok{(hosp\_any\_12m }\SpecialCharTok{\textasciitilde{}}\NormalTok{ treatment }\SpecialCharTok{+}\NormalTok{ hhsize\_12m }\SpecialCharTok{+}\NormalTok{ draw\_lottery }\SpecialCharTok{+}\NormalTok{ hosp\_any\_0m }\SpecialCharTok{+}\NormalTok{ er\_any\_0m, }\AttributeTok{weights =} \SpecialCharTok{\textasciitilde{}}\NormalTok{ weight\_12m, }\AttributeTok{data =}\NormalTok{ data, }\AttributeTok{cluster =} \SpecialCharTok{\textasciitilde{}}\NormalTok{ household\_id)}
 
-\NormalTok{data3 }\OtherTok{\textless{}{-}}\NormalTok{ data3 }\SpecialCharTok{\%\textgreater{}\%} 
-  \FunctionTok{select}\NormalTok{(person\_id, }\AttributeTok{medicaid =}\NormalTok{ ohp\_all\_ever\_inperson, }\AttributeTok{ohp =}\NormalTok{ ohp\_std\_ever\_inperson)}
-\NormalTok{data3 }\OtherTok{\textless{}{-}}\NormalTok{ data3 }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{mutate}\NormalTok{(}\AttributeTok{health =} \FunctionTok{if\_else}\NormalTok{(medicaid }\SpecialCharTok{\textgreater{}} \DecValTok{0} \SpecialCharTok{|}\NormalTok{ ohp }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{))}
-\NormalTok{data2 }\OtherTok{\textless{}{-}}\NormalTok{ data2 }\SpecialCharTok{\%\textgreater{}\%} 
-\FunctionTok{left\_join}\NormalTok{(data3, }\AttributeTok{by=}\StringTok{"person\_id"}\NormalTok{)}
+\NormalTok{itt2 }\OtherTok{\textless{}{-}} \FunctionTok{feols}\NormalTok{(er\_any\_12m }\SpecialCharTok{\textasciitilde{}}\NormalTok{ treatment }\SpecialCharTok{+}\NormalTok{ hhsize\_12m }\SpecialCharTok{+}\NormalTok{ draw\_lottery }\SpecialCharTok{+}\NormalTok{hosp\_any\_0m }\SpecialCharTok{+}\NormalTok{ er\_any\_0m, }\AttributeTok{weights =} \SpecialCharTok{\textasciitilde{}}\NormalTok{ weight\_12m, }\AttributeTok{data =}\NormalTok{ data, }\AttributeTok{cluster =} \SpecialCharTok{\textasciitilde{}}\NormalTok{ household\_id)}
 
-\NormalTok{itt }\OtherTok{\textless{}{-}} \FunctionTok{feols}\NormalTok{(health }\SpecialCharTok{\textasciitilde{}}\NormalTok{ treatment, }\AttributeTok{data =}\NormalTok{ data2)}
+\FunctionTok{etable}\NormalTok{(itt1, itt2)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-NOTE: 54,177 observations removed because of NA values (LHS: 54,177).
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{screenreg}\NormalTok{(itt, }\AttributeTok{digits=}\DecValTok{3}\NormalTok{, }\AttributeTok{custom.model.names =} \FunctionTok{c}\NormalTok{(}\StringTok{"Health Care"}\NormalTok{) , }\AttributeTok{custom.coef.map =} \FunctionTok{list}\NormalTok{(}\StringTok{"treatmenttreat"} \OtherTok{=} \StringTok{"Lottery"}\NormalTok{), }\AttributeTok{include.rsquared =} \ConstantTok{FALSE}\NormalTok{, }
-       \AttributeTok{include.adjrs =} \ConstantTok{FALSE}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-
-========================
-           Health Care  
-------------------------
-Lottery        0.156 ***
-              (0.005)   
-------------------------
-Num. obs.  20745        
-========================
-*** p < 0.001; ** p < 0.01; * p < 0.05
+                              itt1               itt2
+Dependent Var.:       hosp_any_12m         er_any_12m
+                                                     
+Constant        0.0502*** (0.0059) 0.1692*** (0.0096)
+treatmenttreat    -0.0001 (0.0044)   -0.0002 (0.0074)
+hhsize_12m        -0.0003 (0.0003)  -0.0002. (0.0001)
+draw_lottery      -0.0006 (0.0010)   -0.0011 (0.0016)
+hosp_any_0m     0.1513*** (0.0157)   0.0387* (0.0188)
+er_any_0m       0.0446*** (0.0061) 0.2954*** (0.0105)
+_______________ __________________ __________________
+S.E.: Clustered   by: household_id   by: household_id
+Observations                15,454             15,437
+R2                         0.03480            0.09515
+Adj. R2                    0.03449            0.09486
+---
+Signif. codes: 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 \end{verbatim}
 
 You can see that the estimate is positive. This makes sense as winning
@@ -473,35 +462,30 @@ the remaining people.
 
 \clearpage
 
-\begin{table}
-\centering
-\begin{talltblr}[         %% tabularray outer open
-caption={Balance table (survey responders only)},
-]                     %% tabularray outer close
-{                     %% tabularray inner open
-colspec={Q[]Q[]Q[]},
-column{1}={}{halign=l,},
-column{2,3}={}{halign=r,},
-}                     %% tabularray inner close
-\toprule
-& No medicaid & Yes medicaid \\ \midrule %% TinyTableHeader
-age                                                                & \num{40.089} & \num{40.184} \\
-Female: lottery list data                                          & \num{0.522}  & \num{0.642}  \\
-Individual requested english-language materials: lottery list data & \num{0.903}  & \num{0.909}  \\
-Zip code from lottery list is a metropolitan statistical area      & \num{0.997}  & \num{0.997}  \\
-Average hrs worked/week                                            & \num{2.203}  & \num{1.722}  \\
-Highest level of education completed                               & \num{2.335}  & \num{2.227}  \\
-\bottomrule
-\end{talltblr}
-\end{table}
-
 While there is too big difference, you can see some characteristics
 differ between two groups than the previous randomization (gender ratio,
 average hours worked, etc).
 
 \subsection{c.}\label{c.-1}
 
+I will use first use the ``ever on medicaid'' as the measures of
+coverage.
+
+Now I will use
+
 \subsection{d.}\label{d.-1}
+
+For monotonicity, I guess it would be assuming that people who got into
+lottery will not have tendency to not get a health insurance. I think
+monotonicity would hold in this case as the lottery is just giving you
+chance to apply for health care (OHS Standard). Thus it will at least
+weakly make people apply for health care and get one.
+
+Also, exclusion in this case would mean the lottery will only affect the
+outcome (health and hospital related outcome) only through the treatment
+(getting a health care). This also seems reasonable as lottery is just
+like an experiment. Thus it is very unlikely it will directly affect the
+outcome.
 
 \subsection{e.}\label{e.-1}
 

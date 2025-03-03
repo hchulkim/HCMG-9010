@@ -141,7 +141,7 @@
 
 	\textbf{Research design}
 	\begin{itemize}
-		\item Use worldwide immigration patterns from 1990-2015.
+		\item Use worldwide immigration patterns from 1990-2022.
 		\item Identification strategy: Shift-share IV to causally estimate the impact of immigration.
 	\end{itemize}
 \end{frame}
@@ -150,7 +150,6 @@
 	\textbf{Some trial and error}
 	\begin{itemize}
 		\item Applied shift-share IV regression to estimate impact of immigration on intrastate conflict.
-		\item IV first stage not that great.
 		\item Regression specification not robust to the change in specification.
 		\item :(
 	\end{itemize}
@@ -195,7 +194,7 @@
 	We construct shift-share IV as follows:
 	\begin{align*}
 		D_{it} &= \text{IMM}_{it} / \text{POP}_{it} \quad \text{where}\\ \nonumber  
-		\text{IMM}_{it}  &= \sum_j \overbrace{\text{WORLD}_{j,t-1}}^{\textcolor{red}{\text{Shift}}} \times \underbrace{\frac{\text{CNTRY}_{ij, 1960}}{\text{CNTRY}_{i,1960}}}_{\textcolor{red}{\text{Share}}}	
+		\text{IMM}_{it}  &= \widehat{\text{IMM}_{i,t-1}} +  \sum_j \overbrace{\text{WORLD}_{j,t-1}}^{\textcolor{red}{\text{Shift}}} \times \underbrace{\frac{\text{CNTRY}_{ij, 1960}}{\text{CNTRY}_{i,1960}}}_{\textcolor{red}{\text{Share}}}	
 	\end{align*}
 
 	\begin{itemize}
@@ -211,7 +210,7 @@
 		\resizebox{\textwidth}{!}{
 		\includegraphics{first.png}}
 	\end{figure}	
-	IV does not look that great\ldots
+	IV's predictive power seems to be pretty great but values are kinda weird$\ldots$ Perhaps due to some measurement error (or my error).
 \end{frame}
 
 \begin{frame}{2SLS results}
@@ -229,7 +228,6 @@
 	\item Is it an interesting question?
 	\item Cross country analysis?
 	\item IV assumptions? Using different data for share?
-	\item Not great IV. Alternative?
 	\item Clustering significantly affects the significance.
 	\item Better data on immigration?
 \end{itemize}	

@@ -81,7 +81,16 @@ First, we read in the data.
 ```{r}
 #| echo: true
  
-data <- haven::read_dta("../data/OHIE_Public_Use_Files/OHIE_Data/oregonhie_descriptive_vars.dta")
+data_des <- haven::read_dta("../data/OHIE_Public_Use_Files/OHIE_Data/oregonhie_descriptive_vars.dta")
+data_state <- haven::read_dta("../data/OHIE_Public_Use_Files/OHIE_Data/oregonhie_stateprograms_vars.dta")
+data_0 <- haven::read_dta("../data/OHIE_Public_Use_Files/OHIE_Data/oregonhie_survey0m_vars.dta")
+data_12 <- haven::read_dta("../data/OHIE_Public_Use_Files/OHIE_Data/oregonhie_survey12m_vars.dta")
+
+data <- data_des %>% 
+  left_join(data_state, by="person_id") %>% 
+  left_join(data_0, by = "person_id") %>% 
+  left_join(data_12, by = "person_id")
+
 
 ```
 
@@ -93,18 +102,17 @@ Now we get the balance table by treatment status. We do it for full sample:
 
 # Convert treatment to a factor and then assign new labels
 data <- as.data.table(data)
-balance_full <- data[, .(person_id, treatment, birth_year = birthyear_list, female = female_list, english = english_list, msa = zip_msa_list)]
-balance_full[, age := 2009 - birth_year]
-balance_full[, treatment := as_factor(treatment)]
-balance_full[, treatment := fcase(
+data[, age := 2009 - birthyear_list]
+data[, treatment := as_factor(treatment)]
+data[, treatment := fcase(
   treatment == "Selected", "treat",
   treatment == "Not selected", "control"
 )]
 
 mean_na <- function(x) mean(x, na.rm=T)
 
-datasummary(age + female + english + msa ~ treatment * mean_na, 
-  data = balance_full,
+datasummary(age + female_list + english_list + zip_msa_list ~ treatment * mean_na, 
+  data = data,
   title = "Balance table (full sample)",
   fmt = 3)
 
@@ -116,17 +124,8 @@ Next we do it for people who responded to the survey:
 
 ```{r}
 
-data2 <- haven::read_dta("../data/OHIE_Public_Use_Files/OHIE_Data/oregonhie_survey0m_vars.dta")
-
-data2 <- data2 %>% 
-  select(person_id, employ = employ_hrs_0m, education = edu_0m, starts_with("race"), starts_with("ins"), language = surv_lang_0m, )
-
-data2 <- data2 %>% 
-  left_join(balance_full, by="person_id")
-
-
-datasummary(age + female + english + msa + employ + education ~ treatment * mean_na,
-  data = data2,
+datasummary(age + female_list + english_list + zip_msa_list + employ_hrs_12m + edu_12m ~ treatment * mean_na,
+  data = data,
   title = "Balance table (survey responders only)",
   fmt = 3)
 ```
@@ -136,19 +135,15 @@ We can see that there is not much significant differences between control group 
 Now let's check ITT:
 
 ```{r}
+#| warning: false
+#| message: false
 
-data3 <- haven::read_dta("../data/OHIE_Public_Use_Files/OHIE_Data/oregonhie_stateprograms_vars.dta")
+itt1 <- feols(hosp_any_12m ~ treatment + hhsize_12m + draw_lottery + hosp_any_0m + er_any_0m, weights = ~ weight_12m, data = data, cluster = ~ household_id)
 
-data3 <- data3 %>% 
-  select(person_id, medicaid = ohp_all_ever_inperson, ohp = ohp_std_ever_inperson)
-data3 <- data3 %>% mutate(health = if_else(medicaid > 0 | ohp > 0, 1, 0))
-data2 <- data2 %>% 
-left_join(data3, by="person_id")
+itt2 <- feols(er_any_12m ~ treatment + hhsize_12m + draw_lottery +hosp_any_0m + er_any_0m, weights = ~ weight_12m, data = data, cluster = ~ household_id)
 
-itt <- feols(health ~ treatment, data = data2)
+etable(itt1, itt2)
 
-screenreg(itt, digits=3, custom.model.names = c("Health Care") , custom.coef.map = list("treatmenttreat" = "Lottery"), include.rsquared = FALSE, 
-       include.adjrs = FALSE)
 
 ```
 
@@ -165,6 +160,7 @@ Let's look at a balance table between those who received medicaid and the remain
 \clearpage
 
 ```{r}
+#| eval: false
 #| echo: false
 data2 <- data2 %>% mutate(medicaid = ifelse(medicaid>0, "Yes medicaid", "No medicaid"))
 
@@ -178,6 +174,40 @@ datasummary(age + female + english + msa + employ + education ~ medicaid * mean_
 While there is too big difference, you can see some characteristics differ between two groups than the previous randomization (gender ratio, average hours worked, etc).
 
 ## c.
+
+I will use first use the "ever on medicaid" as the measures of coverage.
+
+```{r}
+#| eval: false
+#| echo: false
+#| warning: false
+#| message: false 
+ 
+library(fixest) 
+
+data1 <- haven::read_dta("../data/OHIE_Public_Use_Files/OHIE_Data/oregonhie_descriptive_vars.dta")
+data2 <- haven::read_dta("../data/OHIE_Public_Use_Files/OHIE_Data/oregonhie_stateprograms_vars.dta")
+data3 <- haven::read_dta("../data/OHIE_Public_Use_Files/OHIE_Data/oregonhie_survey12m_vars.dta")
+
+data <- data %>% 
+  left_join(data2, by="person_id") %>% 
+  left_join(data3, by="person_id") %>% 
+  mutate(medicaid = ohp_all_ever_matchn_30sep2009, drug = rx_any_12m, outpatient = doc_any_12m, ER_visit = er_any_12m, inpatient = hosp_any_12m)
+
+result1 <- feols(drug ~ medicaid, data = data)
+result2 <- feols(outpatient ~ medicaid, data = data)
+result3 <- feols(ER_visit ~ medicaid, data = data)
+result4 <- feols(inpatient ~ medicaid, data = data)
+
+
+etable(result1, result2, result3, result4, style.tex = style.tex("aer"),
+  digits = "r3", drop = "Constant", fitstat = ~ n + r2,
+  signif.code = c("***"=0.01, "**"=0.05, "*"=0.1))
+
+
+```
+
+Now I will use 
 
 ## d.
 
