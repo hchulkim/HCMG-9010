@@ -207,7 +207,7 @@
 
 \title{Problem Set 2}
 \author{Hyoungchul Kim}
-\date{2025-03-02}
+\date{2025-03-05}
 
 \begin{document}
 \maketitle
@@ -312,7 +312,10 @@ derivative with respect to p.
 
 \subsection{a.}\label{a.-1}
 
-First, we read in the data.
+Now we get the balance table by treatment status. We do it for full
+sample:
+
+\subsubsection{Full sample}\label{full-sample}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -325,16 +328,9 @@ First, we read in the data.
   \FunctionTok{left\_join}\NormalTok{(data\_state, }\AttributeTok{by=}\StringTok{"person\_id"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
   \FunctionTok{left\_join}\NormalTok{(data\_0, }\AttributeTok{by =} \StringTok{"person\_id"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
   \FunctionTok{left\_join}\NormalTok{(data\_12, }\AttributeTok{by =} \StringTok{"person\_id"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
 
-Now we get the balance table by treatment status. We do it for full
-sample:
 
-\subsubsection{Full sample}\label{full-sample}
 
-\begin{Shaded}
-\begin{Highlighting}[]
 \CommentTok{\# Convert treatment to a factor and then assign new labels}
 \NormalTok{data }\OtherTok{\textless{}{-}} \FunctionTok{as.data.table}\NormalTok{(data)}
 \NormalTok{data[, age }\SpecialCharTok{:}\ErrorTok{=} \DecValTok{2009} \SpecialCharTok{{-}}\NormalTok{ birthyear\_list]}
@@ -408,6 +404,8 @@ Highest level of education completed                               & \num{2.280}
 \end{talltblr}
 \end{table}
 
+\clearpage
+
 We can see that there is not much significant differences between
 control group and treatment group. This seems to imply that
 randomization is quite well done.
@@ -416,31 +414,33 @@ Now let's check ITT:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{itt1 }\OtherTok{\textless{}{-}} \FunctionTok{feols}\NormalTok{(hosp\_any\_12m }\SpecialCharTok{\textasciitilde{}}\NormalTok{ treatment }\SpecialCharTok{+}\NormalTok{ hhsize\_12m }\SpecialCharTok{+}\NormalTok{ draw\_lottery }\SpecialCharTok{+}\NormalTok{ hosp\_any\_0m }\SpecialCharTok{+}\NormalTok{ er\_any\_0m, }\AttributeTok{weights =} \SpecialCharTok{\textasciitilde{}}\NormalTok{ weight\_12m, }\AttributeTok{data =}\NormalTok{ data, }\AttributeTok{cluster =} \SpecialCharTok{\textasciitilde{}}\NormalTok{ household\_id)}
+\CommentTok{\# itt1 \textless{}{-} feols(hosp\_any\_12m \textasciitilde{} treatment + hhsize\_12m + draw\_lottery + hosp\_any\_0m + er\_any\_0m + not\_er\_noner\_0m, data = data, weights = \textasciitilde{}weight\_12m, cluster = \textasciitilde{}household\_id)}
+\NormalTok{itt1 }\OtherTok{\textless{}{-}} \FunctionTok{feols}\NormalTok{(hosp\_any\_12m }\SpecialCharTok{\textasciitilde{}}\NormalTok{ treatment, }\AttributeTok{data =}\NormalTok{ data)}
 
-\NormalTok{itt2 }\OtherTok{\textless{}{-}} \FunctionTok{feols}\NormalTok{(er\_any\_12m }\SpecialCharTok{\textasciitilde{}}\NormalTok{ treatment }\SpecialCharTok{+}\NormalTok{ hhsize\_12m }\SpecialCharTok{+}\NormalTok{ draw\_lottery }\SpecialCharTok{+}\NormalTok{hosp\_any\_0m }\SpecialCharTok{+}\NormalTok{ er\_any\_0m, }\AttributeTok{weights =} \SpecialCharTok{\textasciitilde{}}\NormalTok{ weight\_12m, }\AttributeTok{data =}\NormalTok{ data, }\AttributeTok{cluster =} \SpecialCharTok{\textasciitilde{}}\NormalTok{ household\_id)}
+\NormalTok{itt2 }\OtherTok{\textless{}{-}} \FunctionTok{feols}\NormalTok{(er\_any\_12m }\SpecialCharTok{\textasciitilde{}}\NormalTok{ treatment, }\AttributeTok{weights =} \SpecialCharTok{\textasciitilde{}}\NormalTok{ weight\_12m, }\AttributeTok{data =}\NormalTok{ data, }\AttributeTok{cluster =} \SpecialCharTok{\textasciitilde{}}\NormalTok{ household\_id)}
 
-\FunctionTok{etable}\NormalTok{(itt1, itt2)}
+\FunctionTok{library}\NormalTok{(texreg)}
+\FunctionTok{screenreg}\NormalTok{(}\FunctionTok{list}\NormalTok{(itt1, itt2))}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-                              itt1               itt2
-Dependent Var.:       hosp_any_12m         er_any_12m
-                                                     
-Constant        0.0502*** (0.0059) 0.1692*** (0.0096)
-treatmenttreat    -0.0001 (0.0044)   -0.0002 (0.0074)
-hhsize_12m        -0.0003 (0.0003)  -0.0002. (0.0001)
-draw_lottery      -0.0006 (0.0010)   -0.0011 (0.0016)
-hosp_any_0m     0.1513*** (0.0157)   0.0387* (0.0188)
-er_any_0m       0.0446*** (0.0061) 0.2954*** (0.0105)
-_______________ __________________ __________________
-S.E.: Clustered   by: household_id   by: household_id
-Observations                15,454             15,437
-R2                         0.03480            0.09515
-Adj. R2                    0.03449            0.09486
----
-Signif. codes: 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+=================================================
+                       Model 1       Model 2     
+-------------------------------------------------
+(Intercept)                0.07 ***      0.26 ***
+                          (0.00)        (0.00)   
+treatmenttreat             0.00         -0.00    
+                          (0.00)        (0.01)   
+-------------------------------------------------
+Num. obs.              23609         23514       
+R^2 (full model)           0.00          0.00    
+R^2 (proj model)                                 
+Adj. R^2 (full model)     -0.00         -0.00    
+Adj. R^2 (proj model)                            
+=================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
 \end{verbatim}
 
 You can see that the estimate is positive. This makes sense as winning
@@ -462,16 +462,72 @@ the remaining people.
 
 \clearpage
 
-While there is too big difference, you can see some characteristics
-differ between two groups than the previous randomization (gender ratio,
-average hours worked, etc).
+\begin{table}
+\centering
+\begin{talltblr}[         %% tabularray outer open
+caption={Balance table (survey responders only)},
+]                     %% tabularray outer close
+{                     %% tabularray inner open
+colspec={Q[]Q[]Q[]},
+column{1}={}{halign=l,},
+column{2,3}={}{halign=r,},
+}                     %% tabularray inner close
+\toprule
+& No medicaid & Yes medicaid \\ \midrule %% TinyTableHeader
+birthyear\_list            & \num{1968.322} & \num{1965.767} \\
+Female                      & \num{0.539}    & \num{0.630}    \\
+English materials requested & \num{0.905}    & \num{0.931}    \\
+ZIP is an MSA               & \num{0.767}    & \num{0.753}    \\
+Average hrs worked/week     & \num{2.208}    & \num{1.624}    \\
+\bottomrule
+\end{talltblr}
+\end{table}
+
+You can see some characteristics differ between two groups than the
+previous randomization (gender ratio, average hours worked, etc).
 
 \subsection{c.}\label{c.-1}
 
-I will use first use the ``ever on medicaid'' as the measures of
-coverage.
+Let's run the result. For indicator of medicaid, we will use currently
+on medicaid, ever on medicaid as the variable. The coefficients in this
+case would be ATE but as there is selection problem, they would be
+biased. First result used Every on mediciad as the variable.
 
-Now I will use
+\begin{verbatim}
+
+===========================================================================
+                       Current prescription  Any primary care  Any ER      
+---------------------------------------------------------------------------
+Ever on mediciad           0.12 ***              0.16 ***          0.05 ***
+                          (0.01)                (0.01)            (0.01)   
+---------------------------------------------------------------------------
+Num. obs.              18308                 23492             23514       
+R^2 (full model)           0.01                  0.02              0.00    
+R^2 (proj model)                                                           
+Adj. R^2 (full model)      0.01                  0.02              0.00    
+Adj. R^2 (proj model)                                                      
+===========================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+\end{verbatim}
+
+Now I will use currently on medicaid as the variable.
+
+\begin{verbatim}
+
+===========================================================================
+                       Current prescription  Any primary care  Any ER      
+---------------------------------------------------------------------------
+Currently on medicaid      0.20 ***              0.32 ***          0.06 ***
+                          (0.01)                (0.01)            (0.01)   
+---------------------------------------------------------------------------
+Num. obs.              18047                 23157             23177       
+R^2 (full model)           0.04                  0.10              0.00    
+R^2 (proj model)                                                           
+Adj. R^2 (full model)      0.04                  0.10              0.00    
+Adj. R^2 (proj model)                                                      
+===========================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+\end{verbatim}
 
 \subsection{d.}\label{d.-1}
 
@@ -489,9 +545,97 @@ outcome.
 
 \subsection{e.}\label{e.-1}
 
+We run the fist stage regrssion result using two possible measures of
+medicaid coverage.
+
+\begin{verbatim}
+
+=================================================
+                       Lottery       Lottery     
+-------------------------------------------------
+Ever on medicaid           0.49 ***              
+                          (0.01)                 
+Currenlty on medicaid                    0.18 ***
+                                        (0.01)   
+-------------------------------------------------
+Num. obs.              33823         23350       
+R^2 (full model)           0.13          0.03    
+R^2 (proj model)                                 
+Adj. R^2 (full model)      0.13          0.03    
+Adj. R^2 (proj model)                            
+=================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+\end{verbatim}
+
 \subsection{f.}\label{f.}
 
+Compliers in our case are people who actually receive medicaid after
+they win the lottery, but would not have gotten it if they had not won
+the lottery. To characterize the complier group, we can try to
+difference the means of medicaid variables for lottery winners and
+losers. This is somewhat like a first stage estimates. The estimates for
+``curenlty on medicaid'' is:
+
+\begin{verbatim}
+# A tibble: 2 x 2
+  Lottery           Mean
+  <dbl+lbl>        <dbl>
+1 0 [Not selected] 0.319
+2 1 [Selected]     0.508
+\end{verbatim}
+
+So difference in mean is about 0.2. We can also do it for ``every on
+medicaid'':
+
+\begin{verbatim}
+# A tibble: 2 x 2
+  Lottery            Mean
+  <dbl+lbl>         <dbl>
+1 0 [Not selected] 0.0276
+2 1 [Selected]     0.285 
+\end{verbatim}
+
 \subsection{g.}\label{g.}
+
+We will get the LATE estimates using 2SLS regression. This is ATE result
+for the compliers only. If we assume there is heterogeneous effects, we
+should not think of this estimate as the ATT.
+
+\begin{verbatim}
+
+========================================================================================
+                                         Curenly taking med  Any primary care  Any ER   
+----------------------------------------------------------------------------------------
+Currently on medicaid                        0.12 *              0.34 ***          0.02 
+                                            (0.05)              (0.04)            (0.04)
+----------------------------------------------------------------------------------------
+Num. obs.                                17215               21979             21992    
+Num. groups: hhsize_12m^draw_survey_12m    102                 108               109    
+R^2 (full model)                             0.06                0.11              0.01 
+R^2 (proj model)                             0.04                0.10              0.00 
+Adj. R^2 (full model)                        0.06                0.11              0.01 
+Adj. R^2 (proj model)                        0.04                0.10              0.00 
+========================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+\end{verbatim}
+
+\begin{verbatim}
+
+========================================================================================
+                                         Curenly taking med  Any primary care  Any ER   
+----------------------------------------------------------------------------------------
+Ever on medicaid                             0.07 *              0.19 ***          0.01 
+                                            (0.03)              (0.03)            (0.02)
+----------------------------------------------------------------------------------------
+Num. obs.                                17451               22277             22294    
+Num. groups: hhsize_12m^draw_survey_12m    103                 108               109    
+R^2 (full model)                             0.04                0.03              0.01 
+R^2 (proj model)                             0.01                0.02              0.00 
+Adj. R^2 (full model)                        0.03                0.02              0.00 
+Adj. R^2 (proj model)                        0.01                0.02              0.00 
+========================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+\end{verbatim}
 
 
 
