@@ -13,6 +13,18 @@
 \usepackage{changepage}
 \usepackage{booktabs}
 \usepackage{appendixnumberbeamer}
+
+\usepackage{tabularray}
+\usepackage{float}
+\usepackage{codehigh}
+\usepackage[normalem]{ulem}
+\UseTblrLibrary{siunitx}
+\newcommand{\tinytableTabularrayUnderline}[1]{\underline{#1}}
+\newcommand{\tinytableTabularrayStrikeout}[1]{\sout{#1}}
+\NewTableCommand{\tinytableDefineColor}[3]{\definecolor{#1}{#2}{#3}}
+
+
+
 \newcommand{\beginbackup}{
    \newcounter{framenumbervorappendix}
    \setcounter{framenumbervorappendix}{\value{framenumber}}
@@ -87,25 +99,7 @@
 
 \setcounter{framenumber}{0}
 
-\begin{frame}{Motivation}
-	\textbf{Cultural \& economic integration led to surge of immigration worldwide:}
-	\begin{itemize}
-		\item Emergence of globalization.
-		\item Post-cold war (1991 - ). 
-		\item Schengen Agreement (1985 - ).
-		\item US immigration Act 1990 (Annual cap: 500,000 to 700,000).
-		\item[$\Rightarrow$] \textcolor{red}{Important to understand its impact on the society.}
-	\end{itemize}\vspace{1em}
-
-	\textbf{Understanding the impact of immigration is also important in economic perspective}
-	\begin{itemize}
-		\item Local labor market effect; Local amenities; etc.
-		\item [$\Rightarrow$] \textcolor{red}{What about War?}
-	\end{itemize}
-
-\end{frame}
-
-\begin{frame}{Food for thought}
+\begin{frame}{Recap: Food for thought}
 	\textbf{Will immigration increase/decrease conflicts?} \textcolor{red}{Not easy to answer.}	
 	\begin{itemize}
 		\item \textbf{Increase}: (1) Conflicts between natives (2) Bring immigrants' conflicts into the country.  
@@ -118,21 +112,7 @@
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Prior literature}
-	\textbf{Economic activity and armed conflicts}
-\begin{itemize}
-	\item Armed conflicts can be enormously disruptive of economic activity and hamper long-term performance.
-	\item Glick and Taylor (2010).
-\end{itemize}\vspace{1em}
-
-\textbf{Trade and war}
-\begin{itemize}
-	\item Regarding the determinants of war, large literature focused on the impact of trade on war (the results are mixed).
-	\item Barbieri (1996, 2002); Gartzke and Li (2003); martin et al. (2008).
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Research question}
+\begin{frame}{Recap: Research question}
 	\textbf{Does immigration increase or decrease war/armed conflicts?}	
 	\begin{itemize}
 		\item Heterogeneous effects depending on the types of conflict.
@@ -146,16 +126,18 @@
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Preview of results}
+\begin{frame}{(Updated) Preview of results}
 	\textbf{Some trial and error}
 	\begin{itemize}
 		\item Applied shift-share IV regression to estimate impact of immigration on intrastate conflict.
 		\item Regression specification not robust to the change in specification.
-		\item :(
+		\item \textcolor{red}{\textbf{Dig into the descriptive statistics of the main outcome (intra- interstate war) to check any patterns in the data.}}
+		\item Try out different specification for IV.
+		\item Pivot? \textcolor{red}{\textbf{Different data?}}
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Data}
+\begin{frame}{(Recap) Data}
 	\textbf{Immigration}
 	\begin{itemize}
 		\item UN Global migration database (1990-2024, 5 years): Destination-origin pair of immigration stock, at least 190 countries every year. 
@@ -174,6 +156,76 @@
 	\begin{center}
 	\textbf{Final sample: 1990-2022, destination-origin pair of countries}.
 	\end{center}
+\end{frame}
+
+\begin{frame}{Summary statistics: Conflicts data}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+	\centering
+	\resizebox{0.4\textwidth}{!}{
+		\includegraphics{conft.png}
+	}
+\end{figure}	
+\end{column}
+\begin{column}{0.5\textwidth}
+	\begin{wideitemize}
+	\item \textbf{(mean)} should be understood as proportions here.
+	\item Most of the conflicts are intrastate.
+	\item Unlike interstate, there can be other various factors leading to intrastate conflicts, lessening the effect from immigrant. 
+	\end{wideitemize}	
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Conflicts data visualization: Intrastate}
+\begin{figure}
+	\centering
+	\resizebox{0.75\textwidth}{!}{
+		\includegraphics{intra.png}
+	}
+\end{figure}	
+\end{frame}
+
+\begin{frame}{Conflicts data visualization: Interstate}
+	
+\begin{figure}
+	\centering
+	\resizebox{0.75\textwidth}{!}{
+		\includegraphics{inter.png}
+	}
+\end{figure}	
+\end{frame}
+
+\begin{frame}{Summary statistics: Immigrant data}
+\begin{table}
+	\centering
+	\begin{tabular}{lrr}
+		\toprule
+		year & immigration stock (total) & immigration share (mean) \\
+		\midrule
+		1960 & 71,124,984 & 0.055\\
+		1970 & 80,422,844 & 0.069\\
+		1980 & 92,427,478 & 0.074\\
+		\midrule
+		1990 & 139,297,313 & 0.088\\
+		2000 & 163,748,711 & 0.093\\
+		\bottomrule
+	\end{tabular}
+\end{table}	
+\begin{wideitemize}
+\item Noticeable jump from 1980 to 1990.
+\item Is this data issue? Or is this some true exogenous shock (immigration policy change, globalization, etc).
+\end{wideitemize}
+\end{frame}
+
+\begin{frame}{Immigration data visualization}
+\begin{figure}
+	\centering
+	\resizebox{0.75\textwidth}{!}{
+		\includegraphics{imm.png}
+	}
+\end{figure}	
 \end{frame}
 
 \begin{frame}{Baseline regression}
@@ -223,13 +275,41 @@
 \end{footnotesize}
 \end{frame}
 
-\begin{frame}{Concerns and thoughts}
+\begin{frame}{Alternative Shift-share IV: In progress}
+
+	\begin{wideitemize}
+	\item Shift: Total number of immigrants in each period by origin country.
+	\item Share: 1960 Share of immigrants in each country by origin country.
+	\item Validity: Exogenous shift? Exogenous share?
+	\item In fact, I tried this sometime ago: First-stage not strong.
+	\end{wideitemize}
+	
+\end{frame}
+
+\begin{frame}{Discussion: Other data on conflicts?}
+	\begin{wideitemize}
+	\item There are other data on worldwide conflicts that we can use.
+	\item e.g. Correlates of War.
+	\item Timespan: 1816 – 2007.
+	\item Level of war is higher: At least 1,000 battle death.
+	\item Not much info on type of conflict.
+	\end{wideitemize}
+\end{frame}
+
+\begin{frame}{Discussion: Problems with using two different data on immigration}
+	\begin{wideitemize}
+	\item In the analysis, I use 1960 immigrant data from World Bank for constructing IV.
+	\item But for regressor, I use 1990-2022 immigrant data from UN. 
+	\item Since I am using two data for one analysis, this might be problematic (measurement issue).
+	\item This could also be the reason why some of my results in first-stage is weird
+	\end{wideitemize}	
+\end{frame}
+
+\begin{frame}{Conclusion}
 \begin{itemize}
-	\item Is it an interesting question?
-	\item Cross country analysis?
-	\item IV assumptions? Using different data for share?
-	\item Clustering significantly affects the significance.
-	\item Better data on immigration?
+	\item Is it an interesting question? $\Rightarrow$ Maybe.
+	\item Perhaps relation between immigration and war might not be significant enough.
+	\item Better data on immigration? $\Rightarrow$ Not easy to find a better data.
 \end{itemize}	
 \end{frame}
 
